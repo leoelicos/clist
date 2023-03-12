@@ -1,76 +1,95 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
-const path = require('path');
-const { InjectManifest } = require('workbox-webpack-plugin');
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const WebpackPwaManifest = require('webpack-pwa-manifest')
+const { InjectManifest } = require('workbox-webpack-plugin')
 
-module.exports = () => {
-  return {
-    mode: 'development',
-    // Entry point for files
-    entry: {
-      main: './src/js/index.js',
-      install: './src/js/install.js',
-      cards: './src/js/cards.js'
-    },
-    // Output for our bundles
-    output: {
-      filename: '[name].bundle.js',
-      path: path.resolve(__dirname, 'dist'),
-    },
-    plugins: [
-      // Webpack plugin that generates our html file and injects our bundles. 
-      new HtmlWebpackPlugin({
-        template: './index.html',
-        title: 'Contact Cards'
-      }),
-     
-      // Injects our custom service worker
-      new InjectManifest({
-        swSrc: './src-sw.js',
-        swDest: 'src-sw.js',
-      }),
+const mode = 'development'
 
-      // Creates a manifest.json file.
-      new WebpackPwaManifest({
-        fingerprints: false,
-        inject: true,
-        name: 'Contact Cards',
-        short_name: 'Contact',
-        description: 'Never forget your contacts!',
-        background_color: '#225ca3',
-        theme_color: '#225ca3',
-        start_url: '/',
-        publicPath: '/',
-        icons: [
-          {
-            src: path.resolve('src/images/logo.png'),
-            sizes: [96, 128, 192, 256, 384, 512],
-            destination: path.join('assets', 'icons'),
-          },
-        ],
-      }),
-    ],
+const entryMain = './src/js/index.js'
+const entryInstall = './src/js/install.js'
+const entryCards = './src/js/cards.js'
 
-    module: {
-      // CSS loaders
-      rules: [
+const outputFilename = '[name].bundle.js'
+const outputPath = path.resolve(__dirname, 'dist')
+
+const htmlWebpackPluginTemplate = './index.html'
+const htmlWebpackPluginTitle = 'Contact Cards'
+
+const serviceWorkerSource = './src-sw.js'
+const serviceWorkerDestination = 'src-sw.js'
+
+const manifestName = 'ContactCards'
+const manifestNameShort = 'Contact'
+const manifestDescription = 'Never forget your contacts!'
+const manifestBackgroundColor = '#225CA3'
+const manifestThemeColor = '#255CA3'
+const manifestStartURL = '/'
+const manifestPublicPath = '/'
+const manifestIconPath = path.resolve('src/images/logo.png')
+const manifestIconSizes = [96, 128, 192, 256, 384, 512]
+const manifestIconDestination = path.join('assets', 'icons')
+
+const cssLoader = {
+  test: /\.css$/i,
+  use: ['style-loader', 'css-loader']
+}
+
+const es6Loader = {
+  test: /\.m?js$/,
+  exclude: /node_modules/,
+  use: {
+    loader: 'babel-loader',
+    options: {
+      presets: ['@babel/preset-env'],
+      plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/transform-runtime']
+    }
+  }
+}
+
+const loaders = [cssLoader, es6Loader]
+
+const config = {
+  mode,
+  entry: {
+    main: entryMain,
+    install: entryInstall,
+    cards: entryCards
+  },
+  output: {
+    filename: outputFilename,
+    path: outputPath
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: htmlWebpackPluginTemplate,
+      title: htmlWebpackPluginTitle
+    }),
+    new InjectManifest({
+      swSrc: serviceWorkerSource,
+      swDest: serviceWorkerDestination
+    }),
+    new WebpackPwaManifest({
+      fingerprints: false,
+      inject: true,
+      name: manifestName,
+      short_name: manifestNameShort,
+      description: manifestDescription,
+      background_color: manifestBackgroundColor,
+      theme_color: manifestThemeColor,
+      start_url: manifestStartURL,
+      publicPath: manifestPublicPath,
+      icons: [
         {
-          test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
-        },
-        {
-          test: /\.m?js$/,
-          exclude: /node_modules/,
-          // We use babel-loader in order to use ES6.
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-              plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/transform-runtime'],
-            },
-          },
-        },
-      ],
-    },
-  };
-};
+          src: manifestIconPath,
+          sizes: manifestIconSizes,
+          destination: manifestIconDestination
+        }
+      ]
+    })
+  ],
+  module: {
+    rules: loaders
+  }
+}
+
+module.exports = () => config
