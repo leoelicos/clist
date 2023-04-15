@@ -1,12 +1,10 @@
 {
-  "name": "Contact",
+  "name": "clist",
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack --mode production",
     "start": "webpack --watch"
   },
-  "author": "2U",
-  "license": "UNLICENSED",
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/plugin-transform-runtime": "^7.15.0",
