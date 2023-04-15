@@ -1,5 +1,5 @@
 {
-  "name": "contact",
+  "name": "clist",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -8,8 +8,6 @@
     "start": "node server.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
   },
