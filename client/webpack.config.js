@@ -13,19 +13,20 @@ const outputFilename = '[name].bundle.js'
 const outputPath = path.resolve(__dirname, 'dist')
 
 const htmlWebpackPluginTemplate = './index.html'
-const htmlWebpackPluginTitle = 'Contact Cards'
+const htmlWebpackPluginTitle = 'clist'
+const htmlWebpackPluginFavicon = './src/images/clist.png'
 
 const serviceWorkerSource = './src-sw.js'
 const serviceWorkerDestination = 'src-sw.js'
 
-const manifestName = 'ContactCards'
-const manifestNameShort = 'Contact'
+const manifestName = 'clist'
+const manifestNameShort = 'clist'
 const manifestDescription = 'Never forget your contacts!'
 const manifestBackgroundColor = '#225CA3'
 const manifestThemeColor = '#255CA3'
 const manifestStartURL = '/'
 const manifestPublicPath = '/'
-const manifestIconPath = path.resolve('src/images/logo.png')
+const manifestIconPath = path.resolve('src/images/clist.png')
 const manifestIconSizes = [96, 128, 192, 256, 384, 512]
 const manifestIconDestination = path.join('assets', 'icons')
 
@@ -62,7 +63,8 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: htmlWebpackPluginTemplate,
-      title: htmlWebpackPluginTitle
+      title: htmlWebpackPluginTitle,
+      favicon: htmlWebpackPluginFavicon
     }),
     new InjectManifest({
       swSrc: serviceWorkerSource,
